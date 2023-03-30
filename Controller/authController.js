@@ -3,7 +3,7 @@ import { siginShema, sigupShema } from "../validate/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export const sigup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { userName, email, passWord } = req.body;
     const { error } = sigupShema.validate(req.body, { abortEarly: false });
@@ -38,7 +38,7 @@ export const sigup = async (req, res) => {
     });
   }
 };
-export const sigin = async (req, res) => {
+export const signin = async (req, res) => {
   try {
     const { email, passWord } = req.body;
     const { error } = siginShema.validate(email, passWord);
