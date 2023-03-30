@@ -73,3 +73,54 @@ export const sigin = async (req, res) => {
     });
   }
 };
+export const getAllUser = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (!users) {
+      return res.status(401).json({
+        message: "Không tìm thấy",
+      });
+    }
+    return res.status(200).json({
+      message: "Thành công",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+export const getOneUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.param.id });
+    if (!user) {
+      return res.status(401).json({
+        message: "Không tìm thấy",
+      });
+    }
+    return res.status(200).json({
+      message: "Thành công",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+export const userRemove = async (req, res) => {
+  try {
+    const userdelete = await User.findOneAndRemove({ _id: req.param.id });
+    if (!userdelete) {
+      return res.status(401).json({
+        message: "Không tìm thấy",
+      });
+    }
+    return res.status(200).json({
+      message: "Thành công",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
