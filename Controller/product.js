@@ -76,7 +76,7 @@ export const productAdd = async (req, res) => {
 export const productRemove = async (req, res) => {
   try {
     const id = req.param.id;
-    const productDelete = await Product.findByIdAndDelete({ id });
+    const productDelete = await Product.findOneAndDelete(id);
     if (!productDelete) {
       return res.status(401).json({
         message: "Xóa sản phẩm thất bại",

@@ -100,7 +100,7 @@ export const cateUpdate = async (req, res) => {
         message: errors,
       });
     }
-    const cateupdated = await Cateproduct.findByIdAndUpdate(id, body, {
+    const cateupdated = await Cateproduct.findOneAndUpdate(id, body, {
       new: true,
     });
     if (!cateupdated) {
@@ -111,6 +111,25 @@ export const cateUpdate = async (req, res) => {
     return res.status(200).json({
       message: "Thành công",
       cateupdated,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+export const cateRemove = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const cate = await Cateproduct.findOneAndRemove({ _id: id });
+    if (!cate) {
+      return res.status(401).json({
+        message: "Xóa thất bại",
+      });
+    }
+    return res.status(200).json({
+      message: "Thành công",
+      cate,
     });
   } catch (error) {
     return res.status(500).json({
