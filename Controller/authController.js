@@ -40,9 +40,14 @@ export const signup = async (req, res) => {
 };
 export const signin = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { email, password } = req.body;
     console.log(email,password);
     const { error } = siginShema.validate(req.body,{ abortEarly: false });
+=======
+    const { email, passWord } = req.body;
+    const { error } = siginShema.validate(req.body, { abortEarly: false });
+>>>>>>> 82d41da323c95692f2902147c40db812bfda5ce9
     if (error) {
       const errors = error.details.map((item) => item.message);
       return res.status(400).json({
@@ -67,7 +72,11 @@ export const signin = async (req, res) => {
     return res.status(201).json({
       message: "Đăng nhập thành công",
       accessToken,
+<<<<<<< HEAD
       user
+=======
+      user,
+>>>>>>> 82d41da323c95692f2902147c40db812bfda5ce9
     });
   } catch (error) {
     return res.status(500).json({
@@ -75,54 +84,4 @@ export const signin = async (req, res) => {
     });
   }
 };
-export const getAllUser = async (req, res) => {
-  try {
-    const users = await User.find();
-    if (!users) {
-      return res.status(401).json({
-        message: "Không tìm thấy",
-      });
-    }
-    return res.status(200).json({
-      message: "Thành công",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error,
-    });
-  }
-};
-export const getOneUser = async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.param.id });
-    if (!user) {
-      return res.status(401).json({
-        message: "Không tìm thấy",
-      });
-    }
-    return res.status(200).json({
-      message: "Thành công",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error,
-    });
-  }
-};
-export const userRemove = async (req, res) => {
-  try {
-    const userdelete = await User.findOneAndRemove({ _id: req.param.id });
-    if (!userdelete) {
-      return res.status(401).json({
-        message: "Không tìm thấy",
-      });
-    }
-    return res.status(200).json({
-      message: "Thành công",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error,
-    });
-  }
-};
+
