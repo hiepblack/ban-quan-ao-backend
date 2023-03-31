@@ -1,6 +1,6 @@
-import { Jwt } from "jsonwebtoken";
-import User from "../Model/User";
-const checkauth = async (req, res, next) => {
+import Jwt from "jsonwebtoken";
+import User from "../Model/User.js";
+const checkAuth = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
       return res.status(401).json({
@@ -27,3 +27,4 @@ const checkauth = async (req, res, next) => {
     });
   }
 };
+export default checkAuth;

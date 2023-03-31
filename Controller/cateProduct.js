@@ -100,7 +100,7 @@ export const cateUpdate = async (req, res) => {
         message: errors,
       });
     }
-    const cateupdated = await Cateproduct.findByIdAndUpdate({ _id: id }, body, {
+    const cateupdated = await Cateproduct.findByIdAndUpdate(id, body, {
       new: true,
     });
     if (!cateupdated) {
