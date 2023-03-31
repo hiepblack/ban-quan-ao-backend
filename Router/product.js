@@ -8,11 +8,16 @@ import {
   productupdate,
 } from "../Controller/product.js";
 import checkAuth from "../midlewares/checkAuth.js";
+
 const router = express.Router();
-router.post("/productadd", checkAuth, productAdd);
-router.get("/products", getAllproduct);
-router.put("/productupdate/:id", checkAuth, productupdate);
-router.get("/product/:id", checkAuth, getOneproduct);
+
+router.post("/", checkAuth, productAdd);
+router.get("/", getAllproduct);
+router.put("/:id", checkAuth, productupdate);
+router.get("/:id", checkAuth, getOneproduct);
+router.delete("/:id", checkAuth, productRemove);
+
 router.get("/productcate/:id", checkAuth, getOnecate);
-router.delete("/product/:id", checkAuth, productRemove);
+
+
 export default router;

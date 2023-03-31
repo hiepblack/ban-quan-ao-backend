@@ -34,6 +34,7 @@ const connect = async () => {
 // middleware
 app.use(express.json());
 app.use(cors(corsOptions));
+
 app.use("/auth", routerAuth);
 app.use("/products", routerProduct);
 app.use("/category", routerCategoryProduct);

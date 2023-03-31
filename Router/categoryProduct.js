@@ -9,9 +9,12 @@ import {
 import checkAuth from "../midlewares/checkAuth.js";
 
 const router = express.Router();
-router.get("/categoryProduct", getAllcate);
-router.post("/addcategory", checkAuth, addCate);
+
+router.get("/", getAllcate);
+router.post("/", checkAuth, addCate);
 router.get("/:id", checkAuth, getAllproduct);
 router.put("/:id", checkAuth, cateUpdate);
 router.delete("/:id", checkAuth, cateRemove);
+
+
 export default router;
