@@ -21,13 +21,14 @@ export const sigupShema = joi.object({
   }),
   image: joi.string(),
 });
+
 export const siginShema = joi.object({
   email: joi.string().required().email().messages({
     "String.empty": "Email không được bỏ trống",
     "any.required": "Trường hợp này bắt buộc",
     "String.email": "Email không đúng định dạng",
   }),
-  passWord: joi.string().required().min(3).messages({
+  password: joi.string().required().min(3).messages({
     "String.empty": "mật khẩu không được bỏ trống",
     "any.required": "Trường hợp này bắt buộc",
     "string.min": "mật khẩu ít nhất {#limit} kí tự",

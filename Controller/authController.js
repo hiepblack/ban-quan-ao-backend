@@ -40,21 +40,22 @@ export const signup = async (req, res) => {
 };
 export const signin = async (req, res) => {
   try {
-    const { email, passWord } = req.body;
-    const { error } = siginShema.validate(email, passWord);
+    const { email, password } = req.body;
+    console.log(email,password);
+    const { error } = siginShema.validate(req.body,{ abortEarly: false });
     if (error) {
       const errors = error.details.map((item) => item.message);
       return res.status(400).json({
         message: errors,
       });
     }
-    const user = User.findOne({ email: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(400).json({
         message: "Email không tồn tại",
       });
     }
-    const isMathpassWord = await bcrypt.compare(passWord, user.passWord);
+    const isMathpassWord = await bcrypt.compare(password, user.passWord);
     if (!isMathpassWord) {
       return res.status(400).json({
         message: "Mật khẩu không chính xác",
@@ -66,6 +67,7 @@ export const signin = async (req, res) => {
     return res.status(201).json({
       message: "Đăng nhập thành công",
       accessToken,
+      user
     });
   } catch (error) {
     return res.status(500).json({
