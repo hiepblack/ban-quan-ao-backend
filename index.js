@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import routerAuth from "./Router/user.js";
+import routerProduct from "./Router/product.js";
+import routerCategoryProduct from "./Router/categoryProduct.js";
 
 dotenv.config();
 const app = express();
@@ -33,7 +35,8 @@ const connect = async () => {
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use("/auth", routerAuth);
-
+app.use("/products", routerProduct);
+app.use("/category", routerCategoryProduct);
 app.listen(port, () => {
   connect();
   console.log("server listening on port", port);
