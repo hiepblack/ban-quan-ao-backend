@@ -3,7 +3,10 @@ import productShema from "../validate/product.js";
 
 export const getAllproduct = async (req, res) => {
   try {
-    const products = await Product.find().populate("categoryId");
+    const products = await Product.find().populate({
+      path: "categoryId",
+      select: "nameCategory",
+    });
     if (!products) {
       return res.status(401).json({
         message: "Không tìm thấy sản phẩm nào",
@@ -23,9 +26,10 @@ export const getAllproduct = async (req, res) => {
 export const getOneproduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await Product.findById(id).populate("categoryId");
-    // console.log(product);
-    // return;
+    const product = await Product.findById(id).populate("categoryId").populate({
+      path: "categoryId",
+      select: "nameCategory",
+    });
     if (!product) {
       return res.status(401).json({
         message: "Không tìm thấy sản phẩm nào",
