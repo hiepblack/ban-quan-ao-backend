@@ -7,7 +7,6 @@ import {
 } from "../Controller/userController.js";
 import checkAuth from "../midlewares/checkAuth.js";
 
-
 const router = express.Router();
 
 router.post("/signup", signup);
