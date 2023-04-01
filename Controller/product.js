@@ -1,3 +1,4 @@
+import { query } from "express";
 import Product from "../Model/product.js";
 import productShema from "../validate/product.js";
 
@@ -146,11 +147,40 @@ export const getOnecate = async (req, res) => {
 
 export const fiterProduct = async (req, res) => {
   try {
-    const quantity = req.query.quantity;
+    const price = req.query.price;
     const size = req.query.size;
-    const product = await Product.find({
-      $or: [{ quantity: { $gt: 200 } }, { size: size },{colors: "trang"}],
-    });
+    const category = req.query.category;
+    console.log(category);
+    let query;
+    if (size) {
+      query = { size: size };
+    }
+    if (price) {
+      query = { price: { $gt: price } };
+    }
+    if (category) {
+      query = { categoryId: category };
+    }
+    if (size && price && category) {
+      query = {
+        $and: [
+          { size: size },
+          { price: { $gt: price } },
+          { categoryId: category },
+        ],
+      };
+    }
+    if (size && price) {
+      query = { $and: [{ size: size }, { price: { $gt: price } }] };
+    }
+    if (size && category) {
+      query = { $and: [{ size: size }, { categoryId: category }] };
+    }
+    if (price && category) {
+      query = { $and: [{ price: { $gt: price } }, { categoryId: category }] };
+    }
+    const product = await Product.find(query);
+
     if (product.length == 0) {
       return res.status(401).json({
         message: "Không tìm thấy sản phẩm nào",
@@ -161,4 +191,40 @@ export const fiterProduct = async (req, res) => {
       product,
     });
   } catch (error) {}
+};
+
+export const getAllproductSort = async (req, res) => {
+  try {
+    let query;
+    if (req.query.nameAz) {
+      query = { nameProduct: 1 };
+      console.log("abc");
+    }
+    if (req.query.nameZa) {
+      query = { nameProduct: -1 };
+    }
+    if (req.query.priceAz) {
+      query = { price: 1 };
+    }
+    if (req.query.priceZa) {
+      query = { price: -1 };
+    }
+    const products = await Product.find().sort(query).populate({
+      path: "categoryId",
+      select: "nameCategory",
+    });
+    if (!products) {
+      return res.status(401).json({
+        message: "Không tìm thấy sản phẩm nào",
+      });
+    }
+    return res.status(200).json({
+      message: "Thành công",
+      products,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
 };

@@ -6,7 +6,8 @@ import {
   productAdd,
   productRemove,
   productupdate,
-  fiterProduct
+  fiterProduct,
+  getAllproductSort
 } from "../Controller/product.js";
 import checkAuth from "../midlewares/checkAuth.js";
 
@@ -19,6 +20,7 @@ router.get("/:id", getOneproduct);
 router.delete("/:id", checkAuth, productRemove);
 
 router.post("/filter/",fiterProduct);
+router.post("/sort/",getAllproductSort);
 
 router.get("/productcate/:id", checkAuth, getOnecate);
 
