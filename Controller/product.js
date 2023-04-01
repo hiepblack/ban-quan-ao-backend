@@ -143,3 +143,22 @@ export const getOnecate = async (req, res) => {
     });
   }
 };
+
+export const fiterProduct = async (req, res) => {
+  try {
+    const quantity = req.query.quantity;
+    const size = req.query.size;
+    const product = await Product.find({
+      $or: [{ quantity: { $gt: 200 } }, { size: size },{colors: "trang"}],
+    });
+    if (product.length == 0) {
+      return res.status(401).json({
+        message: "Không tìm thấy sản phẩm nào",
+      });
+    }
+    return res.status(200).json({
+      message: "Đã tìm thấy sản phẩm",
+      product,
+    });
+  } catch (error) {}
+};

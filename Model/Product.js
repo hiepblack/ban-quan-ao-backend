@@ -5,10 +5,15 @@ const productShema = mongoose.Schema(
       type: String,
       require: true,
     },
+    price:{
+      type: String,
+      require: true,
+    },
     quantity: {
       type: Number,
       require: true,
     },
+    brand:String,
     imgProduct: [String],
     size: {
       type: [String],
