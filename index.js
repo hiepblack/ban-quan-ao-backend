@@ -5,6 +5,8 @@ import cors from "cors";
 import routerAuth from "./Router/user.js";
 import routerProduct from "./Router/product.js";
 import routerCategoryProduct from "./Router/categoryProduct.js";
+import routerOrder from "./Router/order.js";
+import routerOrderdetail from "./Router/orderdetail.js";
 
 dotenv.config();
 const app = express();
@@ -38,6 +40,8 @@ app.use(cors(corsOptions));
 app.use("/auth", routerAuth);
 app.use("/products", routerProduct);
 app.use("/category", routerCategoryProduct);
+app.use("/order", routerOrder);
+app.use("/orderdetail", routerOrderdetail);
 app.listen(port, () => {
   connect();
   console.log("server listening on port", port);
