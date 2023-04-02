@@ -1,5 +1,6 @@
 import Jwt from "jsonwebtoken";
 import User from "../Model/User.js";
+
 const checkAuth = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
