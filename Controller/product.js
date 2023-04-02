@@ -1,6 +1,5 @@
-import { query } from "express";
-import Product from "../Model/product.js";
 import productShema from "../validate/product.js";
+import Product from "../Model/products.js"
 
 export const getAllproduct = async (req, res) => {
   try {
@@ -27,7 +26,7 @@ export const getAllproduct = async (req, res) => {
 export const getOneproduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await Product.findById(id).populate("categoryId").populate({
+    const product = await Product.findById(id).populate('comments').populate({
       path: "categoryId",
       select: "nameCategory",
     });
@@ -150,13 +149,21 @@ export const fiterProduct = async (req, res) => {
     const price = req.query.price;
     const size = req.query.size;
     const category = req.query.category;
-    console.log(category);
     let query;
     if (size) {
       query = { size: size };
     }
-    if (price) {
-      query = { price: { $gt: price } };
+    if (price === "1") {
+      query = { price: { $lt: 500000 } };
+    }
+    if (price === "2") {
+      query = { price: { $gte: 500000, $lte: 600000 } };
+    }
+    if (price === "3") {
+      query = { price: { $gte: 600000, $lte: 700000 } };
+    }
+    if (price === "4") {
+      query = { price: { $gt: 700000 } };
     }
     if (category) {
       query = { categoryId: category };
@@ -165,19 +172,19 @@ export const fiterProduct = async (req, res) => {
       query = {
         $and: [
           { size: size },
-          { price: { $gt: price } },
+          { price: { $gt: 500000 } },
           { categoryId: category },
         ],
       };
     }
     if (size && price) {
-      query = { $and: [{ size: size }, { price: { $gt: price } }] };
+      query = { $and: [{ size: size }, { price: { $gt: 100000 } }] };
     }
     if (size && category) {
       query = { $and: [{ size: size }, { categoryId: category }] };
     }
     if (price && category) {
-      query = { $and: [{ price: { $gt: price } }, { categoryId: category }] };
+      query = { $and: [{ price: { $gt: 100000 } }, { categoryId: category }] };
     }
     const product = await Product.find(query);
 

@@ -1,4 +1,6 @@
-import Comment from "../Model/comment_product";
+import Comment from "../Model/comment_product.js";
+import Product from "../Model/products.js";
+
 export const getAllcmt = async (req, res) => {
   try {
     const comments = await Comment.find();
@@ -35,7 +37,9 @@ export const getOnecmt = async (req, res) => {
     });
   }
 };
+
 export const addcmt = async (req, res) => {
+  const productId = req.params.productId;
   try {
     const comment = await Comment.create(req.body);
     if (!comment) {
@@ -43,8 +47,13 @@ export const addcmt = async (req, res) => {
         message: "Không bình luận ",
       });
     }
+    await Product.findByIdAndUpdate(productId, {
+      $push: {
+        comments: comment._id,
+      },
+    });
     return res.status(200).json({
-      message: "Thành công",
+      message: "Comment thành công",
       successfull: true,
       comment,
     });
@@ -54,6 +63,7 @@ export const addcmt = async (req, res) => {
     });
   }
 };
+
 export const cmtRemove = async (req, res) => {
   try {
     const commentDeleted = await Comment.findOneAndDelete({

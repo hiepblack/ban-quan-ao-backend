@@ -1,5 +1,4 @@
 import Cateproduct from "../Model/cateproduct.js";
-import Product from "../Model/product.js";
 import cateproductShema from "../validate/cateProduct.js";
 
 export const getAllcate = async (req, res) => {

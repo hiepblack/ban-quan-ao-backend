@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const productShema = mongoose.Schema(
   {
     nameProduct: {
@@ -31,7 +32,13 @@ const productShema = mongoose.Schema(
       type: String,
       require: true,
     },
+    comments: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "comment_product",
+      },
+    ],
   },
   { timestamps: true }
 );
-export default mongoose.model("product", productShema);
+export default mongoose.model("Product", productShema)

@@ -1,4 +1,5 @@
 import Orderdetails from "../Model/orderdetails.js";
+
 export const create = async (req, res) => {
   try {
     const detail = await Orderdetails.create(req.body);
