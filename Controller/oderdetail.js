@@ -1,8 +1,9 @@
 import Orderdetails from "../Model/orderdetails.js";
 import detailSchema from "../validate/orderdetail.js";
-export const create = async (req, res) => {
+
+export const createDetail = async (req, res) => {
   try {
-    const { error } = await detailSchema.validate(req.body);
+    const { error } = detailSchema.validate(req.body);
     if (error) {
       const errors = error.details.map((item) => item.message);
       return res.status(401).json({
@@ -17,6 +18,7 @@ export const create = async (req, res) => {
     }
     return res.status(200).json({
       message: "Thêm thành công",
+      detail
     });
   } catch (error) {
     return res.status(500).json({
@@ -24,6 +26,8 @@ export const create = async (req, res) => {
     });
   }
 };
+
+
 export const getAll = async (req, res) => {
   try {
     const detail = await Orderdetails.find(req.body);

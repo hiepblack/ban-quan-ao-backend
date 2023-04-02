@@ -12,6 +12,6 @@ const router = express.Router();
 router.get("/", getAll);
 router.get("/:id", getOne);
 router.put("/update/:id", checkAuth, update);
-router.post("/add", create);
+router.post("/", create);
 
 export default router;

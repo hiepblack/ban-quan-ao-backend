@@ -1,9 +1,10 @@
 import Order from "../Model/order.js";
 import orderSchema from "../validate/order.js";
 
+
 export const create = async (req, res) => {
   try {
-    const { error } = await orderSchema.validate(req.body);
+    const { error } = orderSchema.validate(req.body);
     if (error) {
       const errors = error.details.map((item) => item.message);
       return res.status(401).json({
@@ -18,6 +19,8 @@ export const create = async (req, res) => {
     }
     return res.status(200).json({
       message: "Thêm thành công",
+      success: true,
+      order
     });
   } catch (error) {
     return res.status(500).json({
@@ -25,6 +28,7 @@ export const create = async (req, res) => {
     });
   }
 };
+
 export const getAll = async (req, res) => {
   try {
     const order = await Order.find();
