@@ -5,7 +5,7 @@ const productShema = mongoose.Schema(
       type: String,
       require: true,
     },
-    price:{
+    price: {
       type: String,
       require: true,
     },
@@ -13,7 +13,7 @@ const productShema = mongoose.Schema(
       type: Number,
       require: true,
     },
-    brand:String,
+    brand: String,
     imgProduct: [String],
     size: {
       type: [String],
@@ -31,7 +31,13 @@ const productShema = mongoose.Schema(
       type: String,
       require: true,
     },
+    comments: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "comment_product",
+      },
+    ],
   },
   { timestamps: true }
 );
-export default mongoose.model("product", productShema);
+export default mongoose.model("Product", productShema);

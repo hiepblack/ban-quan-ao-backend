@@ -69,6 +69,7 @@ export const update = async (req, res) => {
         message: errors,
       });
     }
+
     const detail = await Orderdetails.findOneAndUpdate(
       { _id: req.params.id },
       req.body,

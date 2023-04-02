@@ -1,4 +1,6 @@
 import Order from "../Model/order.js";
+
+
 export const create = async (req, res) => {
   try {
     const order = await Order.create(req.body);
