@@ -1,5 +1,6 @@
 import Orderdetails from "../Model/orderdetails.js";
 import detailSchema from "../validate/orderdetail.js";
+import Product from "../Model/products.js";
 
 export const createDetail = async (req, res) => {
   try {
@@ -16,6 +17,11 @@ export const createDetail = async (req, res) => {
         message: "Thêm đơn hàng thất bại",
       });
     }
+    detail.list.forEach( async (item) =>{
+        await Product.findByIdAndUpdate(item._id,{
+          $inc: { quantity: - item.quantity}
+        })
+    })
     return res.status(200).json({
       message: "Thêm thành công",
       detail
