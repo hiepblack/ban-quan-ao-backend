@@ -19,6 +19,7 @@ export const getAllcmt = async (req, res) => {
     });
   }
 };
+
 export const getOnecmt = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
@@ -47,6 +48,7 @@ export const addcmt = async (req, res) => {
         message: "Không bình luận ",
       });
     }
+
     await Product.findByIdAndUpdate(productId, {
       $push: {
         comments: comment._id,

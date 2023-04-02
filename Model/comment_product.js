@@ -6,8 +6,13 @@ const commentShema = mongoose.Schema(
       type: String,
       require: true,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
+    username: {
+      type: String,
+      require: true,
+    },
+    image:{
+      type: String,
+      require: true,
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
