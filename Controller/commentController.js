@@ -41,6 +41,7 @@ export const getOnecmt = async (req, res) => {
 
 export const addcmt = async (req, res) => {
   const productId = req.params.productId;
+  console.log(productId);
   try {
     const comment = await Comment.create(req.body);
     if (!comment) {
