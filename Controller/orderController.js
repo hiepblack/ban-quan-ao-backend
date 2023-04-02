@@ -1,8 +1,15 @@
 import Order from "../Model/order.js";
-
+import orderSchema from "../validate/order.js";
 
 export const create = async (req, res) => {
   try {
+    const { error } = await orderSchema.validate(req.body);
+    if (error) {
+      const errors = error.details.map((item) => item.message);
+      return res.status(401).json({
+        message: errors,
+      });
+    }
     const order = await Order.create(req.body);
     if (!order) {
       return res.status(400).json({
@@ -58,6 +65,13 @@ export const getOne = async (req, res) => {
 };
 export const update = async (req, res) => {
   try {
+    const { error } = await orderSchema.validate(req.body);
+    if (error) {
+      const errors = error.details.map((item) => item.message);
+      return res.status(401).json({
+        message: errors,
+      });
+    }
     const order = await Order.findOneAndUpdate(
       { _id: req.params.id },
       req.body,

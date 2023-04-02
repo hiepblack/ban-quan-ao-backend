@@ -1,7 +1,14 @@
 import Orderdetails from "../Model/orderdetails.js";
-
+import detailSchema from "../validate/orderdetail.js";
 export const create = async (req, res) => {
   try {
+    const { error } = await detailSchema.validate(req.body);
+    if (error) {
+      const errors = error.details.map((item) => item.message);
+      return res.status(401).json({
+        message: errors,
+      });
+    }
     const detail = await Orderdetails.create(req.body);
     if (!detail) {
       return res.status(400).json({
@@ -37,7 +44,7 @@ export const getAll = async (req, res) => {
 };
 export const getOne = async (req, res) => {
   try {
-    const detail = await Orderdetails.findOne({ _id: req.params.id });
+    const detail = await Orderdetails.findById(req.params.id);
     if (!detail) {
       return res.status(400).json({
         message: "Không có đơn hàng nào",
@@ -55,6 +62,14 @@ export const getOne = async (req, res) => {
 };
 export const update = async (req, res) => {
   try {
+    const { error } = await detailSchema.validate(req.body);
+    if (error) {
+      const errors = error.details.map((item) => item.message);
+      return res.status(401).json({
+        message: errors,
+      });
+    }
+
     const detail = await Orderdetails.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
