@@ -3,14 +3,14 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 
-
-
 import routerAuth from "./Router/user.js";
 import routerProduct from "./Router/product.js";
 import routerCategoryProduct from "./Router/categoryProduct.js";
 import routerOrder from "./Router/order.js";
 import routerOrderdetail from "./Router/orderdetail.js";
-import routerComment from "./Router/comment.js"
+import routerComment from "./Router/comment.js";
+import routerBlogs from "./Router/blog.js";
+import routercateBlogs from "./Router/cateblog.js";
 
 dotenv.config();
 const app = express();
@@ -47,7 +47,8 @@ app.use("/category", routerCategoryProduct);
 app.use("/order", routerOrder);
 app.use("/orderdetail", routerOrderdetail);
 app.use("/comment", routerComment);
-
+app.use("/blog", routerBlogs);
+app.use("/cateblog", routercateBlogs);
 app.listen(port, () => {
   connect();
   console.log("server listening on port", port);
