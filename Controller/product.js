@@ -1,5 +1,5 @@
 import productShema from "../validate/product.js";
-import Product from "../Model/products.js"
+import Product from "../Model/products.js";
 
 export const getAllproduct = async (req, res) => {
   try {
@@ -26,7 +26,7 @@ export const getAllproduct = async (req, res) => {
 export const getOneproduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await Product.findById(id).populate('comments').populate({
+    const product = await Product.findById(id).populate("comments").populate({
       path: "categoryId",
       select: "nameCategory",
     });
@@ -149,55 +149,68 @@ export const fiterProduct = async (req, res) => {
     const price = req.query.price;
     const size = req.query.size;
     const category = req.query.category;
-    let query;
-    if (size) {
-      query = { size: size };
-    }
-    if (price === "1") {
-      query = { price: { $lt: 500000 } };
-    }
-    if (price === "2") {
-      query = { price: { $gte: 500000, $lte: 600000 } };
-    }
-    if (price === "3") {
-      query = { price: { $gte: 600000, $lte: 700000 } };
-    }
-    if (price === "4") {
-      query = { price: { $gt: 700000 } };
-    }
-    if (category) {
-      query = { categoryId: category };
-    }
-    if (size && price && category) {
-      query = {
-        $and: [
-          { size: size },
-          { price: { $gt: 500000 } },
-          { categoryId: category },
-        ],
-      };
-    }
-    if (size && price) {
-      query = { $and: [{ size: size }, { price: { $gt: 100000 } }] };
-    }
-    if (size && category) {
-      query = { $and: [{ size: size }, { categoryId: category }] };
-    }
-    if (price && category) {
-      query = { $and: [{ price: { $gt: 100000 } }, { categoryId: category }] };
-    }
-    const product = await Product.find(query);
+    const p1 = price.split(" - ")[0];
+    const p2 = price.split(" - ")[1];
 
-    if (product.length == 0) {
-      return res.status(401).json({
-        message: "Không tìm thấy sản phẩm nào",
+    if (size && !price && !category) {
+      const product = await Product.find({ size: size });
+      return res.status(200).json({
+        message: "Đã tìm thấy sản phẩm",
+        product,
       });
     }
-    return res.status(200).json({
-      message: "Đã tìm thấy sản phẩm",
-      product,
-    });
-  } catch (error) {}
+
+    if (price && !size && !category) {
+      if (p1 == 0) {
+        const product = await Product.find({ price: { $lte: p2 } });
+        return res.status(200).json({
+          message: "Đã tìm thấy sản phẩm",
+          product,
+        });
+      }
+      if (p2 == 0) {
+        const product = await Product.find({ price: { $gte: p1 } });
+        return res.status(200).json({
+          message: "Đã tìm thấy sản phẩm",
+          product,
+        });
+      }
+      const product = await Product.find({ price: { $gte: p1, $lte: p2 } });
+      return res.status(200).json({
+        message: "Đã tìm thấy sản phẩm",
+        product,
+      });
+    }
+    let query;
+    if (size && price) {
+      console.log("size:", size);
+      console.log("price:", price);
+      if (p1 == 0) {
+        query = { $and: [{ size: size }, { price: { $lte: p2 } }] };
+        const product = await Product.find(query);
+        return res.status(200).json({
+          message: "Đã tìm thấy sản phẩm",
+          product,
+        });
+      }
+      if (p2 == 0) {
+        query = { $and: [{ size: size }, { price: { $gte: p1 } }] };
+        const product = await Product.find(query);
+        return res.status(200).json({
+          message: "Đã tìm thấy sản phẩm",
+          product,
+        });
+      }
+      query = { $and: [{ size: size }, { price: { $gte: p1, $lte: p2 } }] };
+      const product = await Product.find(query);
+      return res.status(200).json({
+        message: "Đã tìm thấy sản phẩm",
+        product,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const getAllproductSort = async (req, res) => {
