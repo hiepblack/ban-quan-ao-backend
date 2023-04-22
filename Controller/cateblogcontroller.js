@@ -1,7 +1,9 @@
 import Cateblog from "../Model/cateblog.js";
+
+
 export const create = async (req, res) => {
   try {
-    const cate = Cateblog.create(req.body);
+    const cate = await Cateblog.create(req.body);
     if (!cate) {
       return res.status(401).json({
         message: "Thêm thất bại",
@@ -20,7 +22,7 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const cates = Cateblog.find();
+    const cates = await Cateblog.find();
     if (cates.lenght == 0) {
       return res.status(401).json({
         message: "Không tìm thấy danh mục nào",

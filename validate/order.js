@@ -2,6 +2,7 @@ import joi from "joi";
 
 const orderSchema = joi.object({
   username: joi.string().required(),
+  email: joi.string().required(),
   oderdetailId: joi.string().required(),
   totalAmount: joi.number().required(),
   address: joi.string().required(),

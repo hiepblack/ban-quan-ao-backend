@@ -7,12 +7,14 @@ import {
   getOne,
   update,
 } from "../Controller/blogcontroller.js";
+
 const router = express.Router();
-router.post("/", getAll);
+
+router.get("/", getAll);
 router.post("/add", create);
 
 router.delete("/delete", checkAuth, blogRemove);
 router.put("/update/:id", checkAuth, update);
-router.post("/:id", checkAuth, getOne);
+router.get("/:id", getOne);
 
 export default router;

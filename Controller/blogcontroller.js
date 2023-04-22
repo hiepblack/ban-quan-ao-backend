@@ -1,4 +1,5 @@
 import Blog from "../Model/blog.js";
+
 export const getAll = async (req, res) => {
   try {
     const blogs = await Blog.find().populate({
@@ -16,7 +17,7 @@ export const getAll = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: error,
+      message: error.message,
     });
   }
 };

@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", getAll);
+router.get("/", getAll);
 router.post("/add", create);
 
 router.delete("/delete", checkAuth, cateblogRemove);

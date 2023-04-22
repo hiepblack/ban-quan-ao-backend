@@ -4,6 +4,9 @@ const orderSchema = mongoose.Schema(
     username: {
       type: String,
     },
+    email: {
+      type: String,
+    },
     oderdetailId: {
       type: mongoose.Types.ObjectId,
       ref: "orderdetails",

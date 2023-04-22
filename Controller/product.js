@@ -151,7 +151,6 @@ export const fiterProduct = async (req, res) => {
     const category = req.query.category;
     const p1 = price.split(" - ")[0];
     const p2 = price.split(" - ")[1];
-
     if (size && !price && !category) {
       const product = await Product.find({ size: size });
       return res.status(200).json({
@@ -159,7 +158,6 @@ export const fiterProduct = async (req, res) => {
         product,
       });
     }
-
     if (price && !size && !category) {
       if (p1 == 0) {
         const product = await Product.find({ price: { $lte: p2 } });
