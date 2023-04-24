@@ -2,11 +2,22 @@ import productShema from "../validate/product.js";
 import Product from "../Model/products.js";
 
 export const getAllproduct = async (req, res) => {
+  const {
+    page = 1,
+    limit = 6,
+    order = "desc",
+    sort = "nameProduct",
+  } = req.query;
   try {
-    const products = await Product.find().populate({
-      path: "categoryId",
-      select: "nameCategory",
-    });
+    const options = {
+      page: page,
+      limit: limit,
+      sort: {
+        [sort]: order === "desc" ? 1 : -1,
+      },
+      populate: ["categoryId", "comments"],
+    };
+    const products = await Product.paginate({}, options);
     if (!products) {
       return res.status(401).json({
         message: "Không tìm thấy sản phẩm nào",
@@ -181,8 +192,6 @@ export const fiterProduct = async (req, res) => {
     }
     let query;
     if (size && price) {
-      console.log("size:", size);
-      console.log("price:", price);
       if (p1 == 0) {
         query = { $and: [{ size: size }, { price: { $lte: p2 } }] };
         const product = await Product.find(query);
@@ -211,38 +220,38 @@ export const fiterProduct = async (req, res) => {
   }
 };
 
-export const getAllproductSort = async (req, res) => {
-  try {
-    let query;
-    if (req.query.nameAz) {
-      query = { nameProduct: 1 };
-      console.log("abc");
-    }
-    if (req.query.nameZa) {
-      query = { nameProduct: -1 };
-    }
-    if (req.query.priceAz) {
-      query = { price: 1 };
-    }
-    if (req.query.priceZa) {
-      query = { price: -1 };
-    }
-    const products = await Product.find().sort(query).populate({
-      path: "categoryId",
-      select: "nameCategory",
-    });
-    if (!products) {
-      return res.status(401).json({
-        message: "Không tìm thấy sản phẩm nào",
-      });
-    }
-    return res.status(200).json({
-      message: "Thành công",
-      products,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error,
-    });
-  }
-};
+// export const getAllproductSort = async (req, res) => {
+//   try {
+//     let query;
+//     if (req.query.nameAz) {
+//       query = { nameProduct: 1 };
+//       console.log("abc");
+//     }
+//     if (req.query.nameZa) {
+//       query = { nameProduct: -1 };
+//     }
+//     if (req.query.priceAz) {
+//       query = { price: 1 };
+//     }
+//     if (req.query.priceZa) {
+//       query = { price: -1 };
+//     }
+//     const products = await Product.find().sort(query).populate({
+//       path: "categoryId",
+//       select: "nameCategory",
+//     });
+//     if (!products) {
+//       return res.status(401).json({
+//         message: "Không tìm thấy sản phẩm nào",
+//       });
+//     }
+//     return res.status(200).json({
+//       message: "Thành công",
+//       products,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       message: error,
+//     });
+//   }
+// };

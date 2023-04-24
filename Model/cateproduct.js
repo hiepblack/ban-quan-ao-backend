@@ -3,7 +3,12 @@ const cateproductShema = mongoose.Schema(
   {
     nameCategory: {
       type: String,
+      require:true
     },
+    image:{
+      type: String,
+      require:true
+    }
   },
   { timestamps: true }
 );
