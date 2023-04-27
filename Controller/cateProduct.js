@@ -11,7 +11,7 @@ export const getAllcate = async (req, res) => {
     }
     return res.status(200).json({
       message: "Thành công",
-      cates
+      cates,
     });
   } catch (error) {
     return res.status(500).json({
@@ -100,7 +100,7 @@ export const cateUpdate = async (req, res) => {
         message: errors,
       });
     }
-    const cateupdated = await Cateproduct.findOneAndUpdate(id, body, {
+    const cateupdated = await Cateproduct.findOneAndUpdate({ _id: id }, body, {
       new: true,
     });
     if (!cateupdated) {
