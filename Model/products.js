@@ -33,6 +33,7 @@ const productShema = mongoose.Schema(
       type: String,
       require: true,
     },
+    status: String,
     comments: [
       {
         type: mongoose.Types.ObjectId,
@@ -43,5 +44,5 @@ const productShema = mongoose.Schema(
   { timestamps: true }
 );
 
-productShema.plugin(mongoosePaginate)
+productShema.plugin(mongoosePaginate);
 export default mongoose.model("Product", productShema);

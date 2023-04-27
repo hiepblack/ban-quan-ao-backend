@@ -2,16 +2,10 @@ import productShema from "../validate/product.js";
 import Product from "../Model/products.js";
 
 export const getAllproduct = async (req, res) => {
-  const {
-    page = 1,
-    limit = 6,
-    order = "desc",
-    sort = "nameProduct",
-  } = req.query;
+  const { page = 1, order = "desc", sort = "nameProduct" } = req.query;
   try {
     const options = {
       page: page,
-      limit: limit,
       sort: {
         [sort]: order === "desc" ? 1 : -1,
       },
@@ -86,8 +80,8 @@ export const productAdd = async (req, res) => {
 
 export const productRemove = async (req, res) => {
   try {
-    const id = req.param.id;
-    const productDelete = await Product.findOneAndDelete(id);
+    const id = req.params.id;
+    const productDelete = await Product.findOneAndDelete({ _id: id });
     if (!productDelete) {
       return res.status(401).json({
         message: "Xóa sản phẩm thất bại",
@@ -114,6 +108,31 @@ export const productupdate = async (req, res) => {
         message: errors,
       });
     }
+    const productUpdated = await Product.findOneAndUpdate(
+      { _id: id },
+      req.body,
+      { new: true }
+    );
+    if (!productUpdated) {
+      return res.status(400).json({
+        message: "Cập nhật thất bại",
+      });
+    }
+    return res.status(200).json({
+      message: "Cập nhật thành công",
+      productUpdated,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+export const updateStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+
     const productUpdated = await Product.findOneAndUpdate(
       { _id: id },
       req.body,
