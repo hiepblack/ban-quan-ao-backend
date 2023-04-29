@@ -2,7 +2,7 @@ import Order from "../Model/order.js";
 import orderSchema from "../validate/order.js";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
-
+import moment from "moment";
 export const create = async (req, res) => {
   try {
     console.log(req.body);
@@ -16,15 +16,15 @@ export const create = async (req, res) => {
     const order = await Order.create(req.body);
     const ordered = await Order.findById(order._id).populate("oderdetailId");
     //tạo gia tri cho table mail
-    const dataOrder = ordered.oderdetailId.list.map(items => {
+    const dataOrder = ordered.oderdetailId.list.map((items) => {
       return {
         item: items.nameProduct,
         quantity: items.quantity,
         size: items.size,
         price: items.price,
-        totalPrice: items.quantity * items.price
-      }
-    })
+        totalPrice: items.quantity * items.price,
+      };
+    });
     // send email
     let config = {
       service: "gmail",
@@ -47,7 +47,7 @@ export const create = async (req, res) => {
         name: ordered.username,
         intro: "Hoá đơn của bạn",
         table: {
-          data: dataOrder
+          data: dataOrder,
         },
         outro: "Tổng số tiền cần thanh toán: " + ordered.totalAmount,
       },
@@ -84,7 +84,7 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const order = await Order.find().populate('oderdetailId');
+    const order = await Order.find().populate("oderdetailId");
     if (order.length == 0) {
       return res.status(400).json({
         message: "Không tìm thấy ",
@@ -142,6 +142,34 @@ export const update = async (req, res) => {
     return res.status(200).json({
       message: "Thành công",
       order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+export const getMonth = async (req, res) => {
+  try {
+    const arr = [];
+    for (let i = 1; i < 13; i++) {
+      const startOfMonth = moment(`2023-${i}-01`, "YYYY-MM-DD").startOf(
+        "month"
+      );
+      const endOfMonth = moment(`2023-${i}-01`, "YYYY-MM-DD").endOf("month");
+      const order = await Order.find({
+        createdAt: {
+          $gte: startOfMonth,
+          $lt: endOfMonth,
+        },
+      }).populate("oderdetailId");
+      const totalAmount = await order.map((item) => item.totalAmount);
+      arr.push(totalAmount);
+    }
+    return res.status(200).json({
+      message: "Thành công",
+      arr,
     });
   } catch (error) {
     return res.status(500).json({
