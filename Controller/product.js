@@ -5,6 +5,7 @@ export const getAllproduct = async (req, res) => {
   const { page = 1, order = "desc", sort = "nameProduct" } = req.query;
   try {
     const options = {
+      limit: 1000,
       page: page,
       sort: {
         [sort]: order === "desc" ? 1 : -1,
@@ -52,7 +53,6 @@ export const getOneproduct = async (req, res) => {
 };
 
 export const productAdd = async (req, res) => {
-  console.log(req.body);
   try {
     const { error } = productShema.validate(req.body);
     if (error) {
