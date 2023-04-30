@@ -2,10 +2,10 @@ import productShema from "../validate/product.js";
 import Product from "../Model/products.js";
 
 export const getAllproduct = async (req, res) => {
-  const { page = 1, order = "desc", sort = "nameProduct" } = req.query;
+  const {limit=10, page = 1, order = "desc", sort = "nameProduct" } = req.query;
   try {
     const options = {
-      limit: 1000,
+      limit: limit,
       page: page,
       sort: {
         [sort]: order === "desc" ? 1 : -1,
