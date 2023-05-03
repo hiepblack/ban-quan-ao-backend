@@ -1,11 +1,16 @@
 import productShema from "../validate/product.js";
 import Product from "../Model/products.js";
-
+import Cateproduct from "../Model/cateproduct.js";
 export const getAllproduct = async (req, res) => {
-  const { page = 1, order = "desc", sort = "nameProduct" } = req.query;
+  const {
+    page = 1,
+    limit = 10,
+    order = "desc",
+    sort = "nameProduct",
+  } = req.query;
   try {
     const options = {
-      limit: 1000,
+      limit: limit,
       page: page,
       sort: {
         [sort]: order === "desc" ? 1 : -1,
@@ -67,6 +72,11 @@ export const productAdd = async (req, res) => {
         message: "Thêm sản phẩm thất bại",
       });
     }
+    await Cateproduct.findByIdAndUpdate(newProduct.categoryId, {
+      $addToSet: {
+        products: newProduct._id,
+      },
+    });
     return res.status(200).json({
       message: "Thêm sản phẩm thành công",
       newProduct,
@@ -82,6 +92,11 @@ export const productRemove = async (req, res) => {
   try {
     const id = req.params.id;
     const productDelete = await Product.findOneAndDelete({ _id: id });
+    await Cateproduct.findByIdAndUpdate(productDelete.cateId, {
+      $pull: {
+        products: productDelete._id,
+      },
+    });
     if (!productDelete) {
       return res.status(401).json({
         message: "Xóa sản phẩm thất bại",
@@ -101,27 +116,46 @@ export const productRemove = async (req, res) => {
 export const productupdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const { error } = productShema.validate(req.body);
-    if (error) {
-      const errors = error.details.map((items) => items.message);
-      return res.status(401).json({
-        message: errors,
+    const productold = await Product.findOne({ _id: id });
+    if (productold.categoryId == req.body.categoryId) {
+      const productUpdated = await Product.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      if (!productUpdated) {
+        return res.status(400).json({
+          message: "Cập nhật thất bại",
+        });
+      }
+      return res.status(200).json({
+        message: "Cập nhật thành công",
+        productUpdated,
+      });
+    } else {
+      await Cateproduct.findOneAndUpdate(
+        { _id: productold.categoryId },
+        { $pull: { products: id } },
+        { new: true }
+      );
+      await Cateproduct.findOneAndUpdate(
+        {
+          _id: req.body.categoryId,
+        },
+        { $addToSet: { products: id } },
+        { new: true }
+      );
+      const productUpdated = await Product.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      if (!productUpdated) {
+        return res.status(400).json({
+          message: "Cập nhật thất bại",
+        });
+      }
+      return res.status(200).json({
+        message: "Cập nhật thành công",
+        productUpdated,
       });
     }
-    const productUpdated = await Product.findOneAndUpdate(
-      { _id: id },
-      req.body,
-      { new: true }
-    );
-    if (!productUpdated) {
-      return res.status(400).json({
-        message: "Cập nhật thất bại",
-      });
-    }
-    return res.status(200).json({
-      message: "Cập nhật thành công",
-      productUpdated,
-    });
   } catch (error) {
     return res.status(500).json({
       message: error,

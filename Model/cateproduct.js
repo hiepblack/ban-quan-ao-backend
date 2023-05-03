@@ -3,12 +3,13 @@ const cateproductShema = mongoose.Schema(
   {
     nameCategory: {
       type: String,
-      require:true
+      require: true,
     },
-    image:{
+    products: [{ type: mongoose.Types.ObjectId, ref: "Products" }],
+    image: {
       type: String,
-      require:true
-    }
+      require: true,
+    },
   },
   { timestamps: true }
 );
