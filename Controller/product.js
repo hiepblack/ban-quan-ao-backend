@@ -143,6 +143,7 @@ export const productupdate = async (req, res) => {
         { $addToSet: { products: id } },
         { new: true }
       );
+
       const productUpdated = await Product.findByIdAndUpdate(id, req.body, {
         new: true,
       });
