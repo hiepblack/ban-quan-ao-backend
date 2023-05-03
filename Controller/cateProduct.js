@@ -1,6 +1,6 @@
 import Cateproduct from "../Model/cateproduct.js";
 import cateproductShema from "../validate/cateProduct.js";
-
+import Product from "../Model/products.js";
 export const getAllcate = async (req, res) => {
   try {
     const cates = await Cateproduct.find();
@@ -100,9 +100,18 @@ export const cateUpdate = async (req, res) => {
         message: errors,
       });
     }
-    const cateupdated = await Cateproduct.findOneAndUpdate({ _id: id }, body, {
-      new: true,
-    });
+    const newcate = {
+      name: body.name,
+      products: body.products,
+      image: body.image,
+    };
+    const cateupdated = await Cateproduct.findOneAndUpdate(
+      { _id: id },
+      newcate,
+      {
+        new: true,
+      }
+    );
     if (!cateupdated) {
       return res.status(401).json({
         message: "Cập nhật thất bại",
@@ -121,6 +130,21 @@ export const cateUpdate = async (req, res) => {
 export const cateRemove = async (req, res) => {
   try {
     const id = req.params.id;
+    const productUpdate = await Product.find({ categoryId: id });
+    for (const product of productUpdate) {
+      await Product.findOneAndUpdate(
+        { _id: product._id },
+        { cateId: "6451c21de34b2671497b4d18" },
+        { new: true }
+      );
+    }
+    await Cateproduct.findOneAndUpdate(
+      { _id: "6451c21de34b2671497b4d18" },
+      {
+        products: [...productUpdate],
+      }
+    );
+
     const cate = await Cateproduct.findOneAndRemove({ _id: id });
     if (!cate) {
       return res.status(401).json({
