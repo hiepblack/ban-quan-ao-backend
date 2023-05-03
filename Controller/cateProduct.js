@@ -100,10 +100,10 @@ export const cateUpdate = async (req, res) => {
         message: errors,
       });
     }
+    const cate = await Cateproduct.findOne({ _id: id });
     const newcate = {
-      name: body.name,
-      products: body.products,
-      image: body.image,
+      nameCategory: body.nameCategory,
+      products: cate.products,
     };
     const cateupdated = await Cateproduct.findOneAndUpdate(
       { _id: id },
