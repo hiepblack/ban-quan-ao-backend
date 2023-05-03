@@ -92,7 +92,7 @@ export const productRemove = async (req, res) => {
   try {
     const id = req.params.id;
     const productDelete = await Product.findOneAndDelete({ _id: id });
-    await Cateproduct.findByIdAndUpdate(productDelete.cateId, {
+    await Cateproduct.findByIdAndUpdate(productDelete.categoryId, {
       $pull: {
         products: productDelete._id,
       },
