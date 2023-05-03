@@ -1,11 +1,17 @@
 import Blog from "../Model/blog.js";
 
 export const getAll = async (req, res) => {
+  const { page = 1, limit = 6 , order = "desc", sort = "createdAt"} = req.query;
   try {
-    const blogs = await Blog.find().populate({
-      path: "cateBlogId",
-      select: "namecateBlog",
-    });
+    const options ={
+      limit: limit,
+      page: page,
+      sort:{
+        [sort]: order === 'desc' ?1 :-1,
+      },
+      populate:"cateBlogId"
+    }
+    const blogs = await Blog.paginate({}, options)
     if (!blogs) {
       return res.status(401).json({
         message: "Không tìm thấy bài viết nào",

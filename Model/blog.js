@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const blogSchema = mongoose.Schema(
   {
@@ -25,4 +26,5 @@ const blogSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+blogSchema.plugin(mongoosePaginate);
 export default mongoose.model("blogs", blogSchema);
